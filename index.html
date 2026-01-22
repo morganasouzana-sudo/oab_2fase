@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>OAB Zen - Estudo Focado</title>
-    <!-- Ícones para visual mais agradável -->
+    <!-- Ícones -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -15,6 +15,7 @@
             --text: #2D3748;
             --text-light: #718096;
             --success: #48BB78;
+            --error: #E53E3E;
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -29,7 +30,7 @@
             flex-direction: column;
         }
 
-        /* --- HEADER SIMPLIFICADO --- */
+        /* --- HEADER --- */
         header {
             background: var(--card-bg);
             padding: 15px 20px;
@@ -58,79 +59,54 @@
         }
         .btn-calma:hover { background: #B2F5EA; transform: translateY(-1px); }
 
-        /* --- NAVEGAÇÃO INFERIOR (TAB BAR) --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            z-index: 20;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
-            color: var(--text-light);
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 50%;
-        }
-
-        .nav-item i { font-size: 1.2rem; margin-bottom: 4px; transition: 0.2s; }
-        .nav-item.active { color: var(--secondary); font-weight: 600; }
-        .nav-item.active i { transform: scale(1.1); }
-
-        /* --- ÁREA PRINCIPAL --- */
+        /* --- LAYOUT --- */
         main {
             flex: 1;
             padding: 20px;
-            padding-bottom: 80px; /* Espaço para a navbar */
+            padding-bottom: 90px;
             overflow-y: auto;
             max-width: 600px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* --- SELETOR DE PEÇA (Estilo Card) --- */
+        .hidden { display: none !important; }
+
+        /* --- SELEÇÃO DE PEÇA --- */
         .selector-container {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 25px;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            margin-bottom: 20px;
+            margin-top: 20px;
             text-align: center;
         }
         
         select {
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 10px;
             border: 1px solid #E2E8F0;
-            margin-top: 10px;
+            margin-top: 15px;
             font-size: 1rem;
             background-color: #F7FAFC;
+            color: var(--text);
+            outline: none;
         }
 
-        /* --- MODO ESQUELETO (WIZARD) --- */
+        /* --- MODO WIZARD (ESQUELETO ZEN) --- */
         .wizard-container {
-            display: none; /* Escondido até selecionar peça */
+            display: flex; /* Correção do bug: Flex por padrão, hidden oculta */
             flex-direction: column;
             height: 100%;
         }
 
         .progress-bar-container {
             width: 100%;
-            height: 6px;
+            height: 8px;
             background: #E2E8F0;
-            border-radius: 3px;
-            margin-bottom: 20px;
+            border-radius: 4px;
+            margin-bottom: 25px;
             overflow: hidden;
         }
 
@@ -144,37 +120,38 @@
         .step-card {
             background: var(--card-bg);
             border-radius: 20px;
-            padding: 30px;
+            padding: 30px 25px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             animation: slideIn 0.4s ease;
             position: relative;
+            border: 1px solid #EDF2F7;
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .step-label {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--primary);
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
+            line-height: 1.4;
         }
 
         .step-input {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: 2px solid #E2E8F0;
             border-radius: 12px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: 0.3s;
             background: #FAFAFA;
+            margin-bottom: 10px;
         }
         .step-input:focus {
             border-color: var(--secondary);
@@ -186,50 +163,52 @@
         .step-actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
+            margin-top: 25px;
             gap: 15px;
         }
 
         .btn-nav {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
             border: none;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
+            font-size: 1rem;
         }
         .btn-prev { background: #EDF2F7; color: #718096; }
         .btn-next { background: var(--secondary); color: white; }
         
         .hint-box {
-            margin-top: 20px;
-            background: #E6FFFA;
+            margin-top: 15px;
+            background: #F0FFF4;
             padding: 15px;
             border-radius: 8px;
-            color: #2C7A7B;
-            font-size: 0.9rem;
+            color: #276749;
+            font-size: 0.95rem;
             display: none;
-            border-left: 4px solid #38B2AC;
+            border-left: 4px solid #48BB78;
+            line-height: 1.5;
         }
 
         .btn-show-hint {
-            margin: 0 auto;
             display: block;
-            margin-top: 15px;
+            margin: 10px auto 0;
             background: none;
             border: none;
             color: var(--secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             text-decoration: underline;
+            padding: 5px;
         }
 
-        /* --- FLASHCARDS (Mantido, mas estilizado) --- */
+        /* --- FLASHCARDS --- */
         .flashcard-container {
             perspective: 1000px;
             height: 400px;
-            display: none;
+            margin-top: 20px;
         }
         
         .flashcard-inner {
@@ -261,59 +240,86 @@
         }
         
         .fc-front { border-bottom: 6px solid var(--secondary); }
-        .fc-back { background: var(--primary); color: white; transform: rotateY(180deg); }
+        .fc-back { background: var(--primary); color: white; transform: rotateY(180deg); border-bottom: 6px solid #ED8936; }
+
+        /* --- NAVEGAÇÃO INFERIOR --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 20;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 50%;
+        }
+
+        .nav-item i { font-size: 1.3rem; margin-bottom: 5px; transition: 0.2s; }
+        .nav-item.active { color: var(--secondary); font-weight: 600; }
+        .nav-item.active i { transform: translateY(-2px); color: var(--secondary); }
 
         /* --- MODAL RESPIRAÇÃO --- */
         #zen-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255,255,255,0.98);
             z-index: 100;
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(10px);
         }
         
         .breathing-circle {
-            width: 150px; height: 150px;
+            width: 160px; height: 160px;
             border-radius: 50%;
             background: #64B6AC;
             display: flex; justify-content: center; align-items: center;
-            color: white; font-size: 1.2rem; font-weight: bold;
-            box-shadow: 0 0 40px rgba(100, 182, 172, 0.4);
+            color: white; font-size: 1.3rem; font-weight: bold;
+            box-shadow: 0 0 50px rgba(100, 182, 172, 0.4);
             transition: transform 4s ease-in-out;
         }
         
         .breathing-text {
-            margin-top: 40px;
-            font-size: 1.2rem;
+            margin-top: 50px;
+            font-size: 1.3rem;
             color: var(--primary);
             text-align: center;
+            font-weight: 600;
         }
-
-        /* Utilitários */
-        .hidden { display: none !important; }
-        .error-message { color: var(--error); text-align: center; padding: 20px; }
-
     </style>
 </head>
 <body>
 
     <header>
-        <h1><i class="fas fa-balance-scale"></i> OAB Zen</h1>
+        <h1><i class="fas fa-feather-alt"></i> OAB Zen</h1>
         <button class="btn-calma" onclick="toggleZen()">
-            <i class="fas fa-wind"></i> Calma
+            <i class="fas fa-wind"></i> Respirar
         </button>
     </header>
 
     <main id="main-content">
         <!-- TELA INICIAL / SELEÇÃO -->
         <div id="selection-screen" class="selector-container">
-            <h2>Vamos praticar o que hoje?</h2>
-            <p style="color: #718096; margin-bottom: 20px;">Escolha uma peça para montar o esqueleto passo a passo.</p>
+            <i class="fas fa-book-reader" style="font-size: 3rem; color: var(--secondary); margin-bottom: 20px;"></i>
+            <h2 style="margin: 0 0 10px 0; color: var(--text);">Prática Focada</h2>
+            <p style="color: var(--text-light); margin-bottom: 20px; font-size: 0.95rem;">
+                Escolha uma peça para estruturar passo a passo, sem pressão.
+            </p>
             <select id="piece-selector" onchange="startWizard()">
-                <option value="">Selecione um Exame...</option>
+                <option value="">Toque para selecionar...</option>
             </select>
         </div>
 
@@ -332,17 +338,17 @@
         <div id="flashcard-screen" class="flashcard-container hidden">
             <div class="flashcard-inner" id="card-inner" onclick="flipCard()">
                 <div class="fc-front">
-                    <span style="background:var(--accent); color:white; padding:4px 12px; border-radius:12px; font-size:0.7rem; margin-bottom:15px; font-weight:bold;">TOQUE PARA VIRAR</span>
-                    <p id="fc-q" style="font-size: 1.3rem; font-weight:600; line-height: 1.5;">Pergunta...</p>
+                    <span style="background:var(--secondary); color:white; padding:5px 12px; border-radius:15px; font-size:0.7rem; margin-bottom:15px; font-weight:bold; letter-spacing: 1px;">TOQUE PARA VIRAR</span>
+                    <p id="fc-q" style="font-size: 1.2rem; font-weight:600; line-height: 1.5; color: var(--text);">Pergunta...</p>
                 </div>
                 <div class="fc-back">
-                    <h3 style="opacity:0.8; font-size:0.9rem; text-transform:uppercase; margin-bottom:15px;">Gabarito</h3>
-                    <p id="fc-a" style="font-size: 1.2rem; line-height:1.6;">Resposta...</p>
+                    <h3 style="color: white; opacity:0.9; font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; letter-spacing: 1px;">Gabarito Oficial</h3>
+                    <p id="fc-a" style="font-size: 1.1rem; line-height:1.6;">Resposta...</p>
                 </div>
             </div>
             <div style="display:flex; gap:10px; margin-top:20px;">
-                <button class="btn-nav btn-prev" onclick="nextCard()">Pular / Revisar</button>
-                <button class="btn-nav btn-next" onclick="nextCard()">Acertei</button>
+                <button class="btn-nav btn-prev" onclick="nextCard()">Revisar Depois</button>
+                <button class="btn-nav btn-next" onclick="nextCard()">Acertei <i class="fas fa-check"></i></button>
             </div>
         </div>
     </main>
@@ -350,11 +356,11 @@
     <!-- NAVEGAÇÃO INFERIOR -->
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="switchMode('esqueleto', this)">
-            <i class="fas fa-file-pen"></i>
+            <i class="fas fa-file-signature"></i>
             <span>Esqueleto</span>
         </button>
         <button class="nav-item" onclick="switchMode('flashcards', this)">
-            <i class="fas fa-layer-group"></i>
+            <i class="fas fa-brain"></i>
             <span>Questões</span>
         </button>
     </nav>
@@ -363,68 +369,126 @@
     <div id="zen-modal">
         <div class="breathing-circle" id="breath-circle">Inspire</div>
         <div class="breathing-text" id="breath-text">Concentre-se na respiração...</div>
-        <button onclick="toggleZen()" style="margin-top:40px; border:none; background:transparent; color:#718096; cursor:pointer; text-decoration:underline;">Voltar ao estudo</button>
+        <button onclick="toggleZen()" style="margin-top:50px; border:none; background:transparent; color:#718096; cursor:pointer; text-decoration:underline; font-size: 1rem;">Voltar ao estudo</button>
     </div>
 
-    <!-- SCRIPT DE DADOS -->
-    <script src="dados.js"></script>
-
     <script>
-        // --- ESTADO DA APLICAÇÃO ---
+        /* =========================================
+           DADOS DA OAB (EMBUTIDOS PARA SEGURANÇA)
+           Exames: 44, 43, 42, 41, 40, 39
+           ========================================= */
+        const OAB_DATA = {
+            "pecas": {
+                "44exame": [
+                    { label: "1. Peça de Interposição", hint: "Endereçamento: Juizado Especial Criminal (JECRIM).<br>Fundamento: Art. 82 da Lei 9.099/95 (Apelação)." },
+                    { label: "2. Tempestividade", hint: "Prazo de 10 dias (Art. 82, §1º da Lei 9.099/95)." },
+                    { label: "3. Razões", hint: "Endereçamento: Turma Recursal." },
+                    { label: "4. Preliminar", hint: "Tese: Perempção (Extinção da Punibilidade).<br>Motivo: Querelante não pediu condenação nas alegações finais (Art. 60, III CPP)." },
+                    { label: "5. Mérito", hint: "Tese: Erro de Tipo Permissivo (Descriminante Putativa).<br>Motivo: Réu achou que o jacaré era real (Art. 20, §1º CP). Absolvição." },
+                    { label: "6. Subsidiária", hint: "Tese: Afastar Reincidência.<br>Motivo: Crime militar próprio não gera reincidência (Art. 64, II CP)." }
+                ],
+                "43exame": [
+                    { label: "1. Peça de Juntada", hint: "Endereçamento: Juizado de Violência Doméstica.<br>Fundamento: Art. 600 do CPP (Contrarrazões)." },
+                    { label: "2. Tempestividade", hint: "Prazo de 3 dias (Art. 600, §1º do CPP)." },
+                    { label: "3. Razões", hint: "Endereçamento: Tribunal de Justiça." },
+                    { label: "4. Preliminar 1", hint: "Tese: Ação Pública Incondicionada (Súmula 542 STJ)." },
+                    { label: "5. Preliminar 2", hint: "Tese: Inexistência de Cerceamento de Defesa (Art. 400-A, I, CPP)." },
+                    { label: "6. Mérito", hint: "Tese: Manter a condenação. Embriaguez voluntária não exclui imputabilidade." }
+                ],
+                "42exame": [
+                    { label: "1. Peça Processual", hint: "Peça: Resposta à Acusação.<br>Endereçamento: Vara Criminal.<br>Fundamento: Art. 396/396-A CPP." },
+                    { label: "2. Preliminar (Nulidade)", hint: "Tese: Ilicitude da Prova (Busca sem mandado baseada só em denúncia anônima)." },
+                    { label: "3. Preliminar (Inépcia)", hint: "Tese: Inépcia da Denúncia (Não descreveu crime antecedente da lavagem)." },
+                    { label: "4. Mérito", hint: "Tese: Atipicidade (Absolvição Sumária). Guardar dinheiro não é crime por si só." }
+                ],
+                "41exame": [
+                    { label: "1. Peça de Interposição", hint: "Peça: Apelação (Art. 593, I, CPP)." },
+                    { label: "2. Preliminar 1", hint: "Nulidade: Cerceamento de Defesa (Prazo comum para delator e delatado viola contraditório)." },
+                    { label: "3. Preliminar 2", hint: "Nulidade: Identidade Física do Juiz (Sentença por juiz que não instruiu)." },
+                    { label: "4. Mérito", hint: "Absolvição: Palavra exclusiva do colaborador não basta para condenar." }
+                ],
+                "40exame": [
+                    { label: "1. Peça de Interposição", hint: "Peça: Apelação (Art. 593, I, CPP)." },
+                    { label: "2. Mérito (Fatos 1-7)", hint: "Tese: Atipicidade (Furto de Uso). Devolução intacta e sem ânimo definitivo." },
+                    { label: "3. Mérito (Fato 8)", hint: "Tese: Desclassificação para Furto Simples (Porta aberta não é escalada)." },
+                    { label: "4. Causa de Diminuição", hint: "Tese: Arrependimento Posterior (Art. 16 CP). Reparação integral antes da denúncia." }
+                ],
+                "39exame": [
+                    { label: "1. Peça de Interposição", hint: "Peça: Apelação (Art. 593, I, CPP)." },
+                    { label: "2. Preliminar", hint: "Tese: Incompetência da Justiça Estadual (Crime a bordo de navio/deslocamento é Federal)." },
+                    { label: "3. Subsidiária", hint: "Tese: Pena-base no mínimo e Afastar agravante (bis in idem)." },
+                    { label: "4. Pedidos", hint: "Regime Aberto e Afastamento da perda do cargo." }
+                ]
+            },
+            "flashcards": [
+                { q: "<strong>[44º]</strong> O falso (doc. médico) se exauriu no estelionato. Qual a tese?", a: "<strong>Consunção</strong> (Súmula 17 STJ). O falso é absorvido." },
+                { q: "<strong>[44º]</strong> Ré menor de 18 na ação, vítima morre depois. É imputável?", a: "Não. <strong>Teoria da Atividade</strong> (Art. 4º CP). Considera-se a idade na ação." },
+                { q: "<strong>[43º]</strong> Acidente planejado mas improvável (coco na cabeça). Há crime?", a: "Não. <strong>Atipicidade</strong> (Falta de Nexo Causal)." },
+                { q: "<strong>[43º]</strong> Quebrar vidro de carro para salvar bebê de insolação é crime?", a: "Não. <strong>Estado de Necessidade</strong>." },
+                { q: "<strong>[42º]</strong> Atirou achando que era ameaça (erro justificável). Qual a tese?", a: "<strong>Legítima Defesa Putativa</strong> (Erro de Tipo Permissivo)." },
+                { q: "<strong>[42º]</strong> Vítima morre por causa independente (ataque de cão). Réu responde pela morte?", a: "Não. Rompimento do <strong>Nexo Causal</strong> (Art. 13 CP)." },
+                { q: "<strong>[41º]</strong> Cabe ROC contra decisão que CONCEDE Habeas Corpus?", a: "Não. Só cabe contra decisão <strong>denegatória</strong>." },
+                { q: "<strong>[40º]</strong> Recebimento da denúncia sem recurso próprio. Como impugnar?", a: "<strong>Habeas Corpus</strong> ou Reclamação." },
+                { q: "<strong>[39º]</strong> Ato de terrorismo por motivação política. Configura a Lei 13.260?", a: "Não. <strong>Atipicidade</strong>. A lei exclui motivação política." },
+                { q: "<strong>[39º]</strong> Infiltração virtual de policial sem ordem judicial. É válida?", a: "Não. Viola a <strong>Reserva de Jurisdição</strong>. Prova ilícita." }
+            ]
+        };
+
+        /* =========================================
+           LÓGICA DA APLICAÇÃO
+           ========================================= */
+        
         let currentMode = 'esqueleto';
         let currentPieceKey = '';
         let currentStepIndex = 0;
         let pieceSteps = [];
         let cardIndex = 0;
 
-        // --- INICIALIZAÇÃO ---
+        // Inicialização
         window.onload = function() {
-            if (typeof OAB_DATA !== 'undefined') {
-                initApp();
-            } else {
-                document.getElementById('main-content').innerHTML = "<div class='error-message'>Erro: 'dados.js' não encontrado.</div>";
-            }
+            initApp();
         };
 
         function initApp() {
             const selector = document.getElementById('piece-selector');
-            for (const key in OAB_DATA.pecas) {
+            selector.innerHTML = '<option value="">Selecione um Exame...</option>';
+            
+            // Ordena as chaves (mais recente primeiro)
+            const keys = Object.keys(OAB_DATA.pecas).sort().reverse();
+            
+            keys.forEach(key => {
                 const option = document.createElement('option');
                 option.value = key;
                 option.text = key.replace("exame", "º Exame");
                 selector.appendChild(option);
-            }
-            loadCard(); // Carrega primeira questão
+            });
+            loadCard(); 
         }
 
-        // --- NAVEGAÇÃO ENTRE MODOS ---
+        // Navegação (Tabs)
         function switchMode(mode, btnElement) {
             currentMode = mode;
             
-            // Atualiza botões
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // Alterna telas
+            // Reseta visibilidade
             document.getElementById('selection-screen').classList.add('hidden');
             document.getElementById('wizard-screen').classList.add('hidden');
-            document.getElementById('flashcard-screen').classList.remove('hidden'); // Reset
+            document.getElementById('flashcard-screen').classList.add('hidden');
 
             if (mode === 'esqueleto') {
-                document.getElementById('flashcard-screen').classList.add('hidden');
                 if (currentPieceKey) {
                     document.getElementById('wizard-screen').classList.remove('hidden');
                 } else {
                     document.getElementById('selection-screen').classList.remove('hidden');
                 }
             } else {
-                // Modo Flashcards
-                document.getElementById('flashcard-screen').style.display = 'block'; // Force display flex issues
                 document.getElementById('flashcard-screen').classList.remove('hidden');
             }
         }
 
-        // --- LÓGICA DO WIZARD (ESQUELETO ZEN) ---
+        // Wizard (Esqueleto)
         function startWizard() {
             const key = document.getElementById('piece-selector').value;
             if (!key) return;
@@ -445,38 +509,38 @@
             const total = pieceSteps.length;
             const progress = ((currentStepIndex + 1) / total) * 100;
 
-            // Atualiza barra
             document.getElementById('progress-bar').style.width = `${progress}%`;
 
-            // HTML do Cartão do Passo
             container.innerHTML = `
                 <div class="step-card">
-                    <div style="font-size:0.8rem; color:#A0AEC0; text-align:center; margin-bottom:10px;">
-                        Passo ${currentStepIndex + 1} de ${total}
+                    <div style="font-size:0.8rem; color:#A0AEC0; text-align:center; margin-bottom:10px; font-weight:600;">
+                        PASSO ${currentStepIndex + 1} DE ${total}
                     </div>
                     <div class="step-label">${stepData.label}</div>
                     
-                    <input type="text" class="step-input" placeholder="Digite o tópico principal..." id="current-input">
+                    <input type="text" class="step-input" placeholder="Digite a tese principal aqui..." id="current-input">
                     
-                    <button class="btn-show-hint" onclick="toggleHint()">Preciso de uma dica</button>
+                    <button class="btn-show-hint" onclick="toggleHint()">Estou travada, preciso de uma dica</button>
                     <div class="hint-box" id="hint-box">${stepData.hint}</div>
 
                     <div class="step-actions">
                         <button class="btn-nav btn-prev" onclick="prevStep()" ${currentStepIndex === 0 ? 'disabled style="opacity:0.5"' : ''}>
-                            <i class="fas fa-arrow-left"></i> Anterior
+                            <i class="fas fa-arrow-left"></i> Voltar
                         </button>
                         <button class="btn-nav btn-next" onclick="nextStep()">
-                            ${currentStepIndex === total - 1 ? 'Concluir <i class="fas fa-check"></i>' : 'Próximo <i class="fas fa-arrow-right"></i>'}
+                            ${currentStepIndex === total - 1 ? 'Finalizar <i class="fas fa-check"></i>' : 'Próximo <i class="fas fa-arrow-right"></i>'}
                         </button>
                     </div>
                 </div>
                 <div style="text-align:center; margin-top:20px;">
-                    <button onclick="exitWizard()" style="border:none; background:none; color:#718096; cursor:pointer;">Escolher outra peça</button>
+                    <button onclick="exitWizard()" style="border:none; background:none; color:#718096; cursor:pointer; font-size:0.9rem;">Escolher outra peça</button>
                 </div>
             `;
             
-            // Foco automático suave
-            setTimeout(() => document.getElementById('current-input').focus(), 100);
+            // Foco suave (apenas em desktop para não abrir teclado no celular abruptamente)
+            if (window.innerWidth > 768) {
+                setTimeout(() => document.getElementById('current-input').focus(), 100);
+            }
         }
 
         function toggleHint() {
@@ -489,8 +553,15 @@
                 currentStepIndex++;
                 renderStep();
             } else {
-                alert("Parabéns! Você estruturou toda a peça."); // Pode ser substituído por modal customizado
-                exitWizard();
+                // Efeito de conclusão simples
+                document.getElementById('step-card-container').innerHTML = `
+                    <div class="step-card" style="text-align:center; align-items:center;">
+                        <i class="fas fa-check-circle" style="font-size:3rem; color:var(--success); margin-bottom:20px;"></i>
+                        <h2 style="color:var(--primary);">Parabéns!</h2>
+                        <p>Você estruturou toda a peça mentalmente.</p>
+                        <button class="btn-nav btn-next" onclick="exitWizard()" style="margin-top:20px; width:100%;">Voltar ao Início</button>
+                    </div>
+                `;
             }
         }
 
@@ -508,7 +579,7 @@
             document.getElementById('selection-screen').classList.remove('hidden');
         }
 
-        // --- LÓGICA DE FLASHCARDS ---
+        // Flashcards
         function loadCard() {
             const list = OAB_DATA.flashcards;
             if (!list || list.length === 0) return;
@@ -527,7 +598,6 @@
 
         function nextCard() {
             const list = OAB_DATA.flashcards;
-            // Efeito visual
             const container = document.getElementById('flashcard-screen');
             container.style.opacity = '0';
             
@@ -541,7 +611,7 @@
             }, 300);
         }
 
-        // --- LÓGICA ZEN (Respiração) ---
+        // Modo Zen (Respiração)
         let zenInterval;
         function toggleZen() {
             const modal = document.getElementById('zen-modal');
@@ -550,28 +620,27 @@
             
             if (modal.style.display === 'flex') {
                 modal.style.display = 'none';
-                clearInterval(zenInterval);
                 return;
             }
 
             modal.style.display = 'flex';
             
-            // Ciclo 4-7-8 simplificado para visual (4s in, 4s hold, 4s out)
-            let phase = 0; // 0: in, 1: hold, 2: out
-            
+            let phase = 0; 
             const runCycle = () => {
-                if (phase === 0) {
+                if (modal.style.display === 'none') return;
+
+                if (phase === 0) { // Inspire (4s)
                     text.innerText = "Inspire...";
                     circle.style.transform = "scale(1.5)";
                     circle.style.transition = "transform 4s ease-out";
                     phase = 1;
                     setTimeout(runCycle, 4000);
-                } else if (phase === 1) {
+                } else if (phase === 1) { // Segure (4s)
                     text.innerText = "Segure...";
                     circle.style.transition = "none"; 
                     phase = 2;
-                    setTimeout(runCycle, 4000); // Hold 4s
-                } else {
+                    setTimeout(runCycle, 4000); 
+                } else { // Expire (4s)
                     text.innerText = "Expire...";
                     circle.style.transition = "transform 4s ease-in";
                     circle.style.transform = "scale(1)";
@@ -581,7 +650,6 @@
             };
             runCycle();
         }
-
     </script>
 </body>
 </html>
