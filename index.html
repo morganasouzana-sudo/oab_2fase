@@ -173,7 +173,10 @@
             background: white; border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
         }
-        .flipped .flashcard-inner { transform: rotateY(180deg); }
+        
+        /* CORREÇÃO DO BUG DE VIRAR: A classe .flipped está no mesmo elemento */
+        .flashcard-inner.flipped { transform: rotateY(180deg); }
+        
         .fc-front, .fc-back {
             position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
             border-radius: 20px; padding: 30px;
@@ -314,6 +317,24 @@
                     { label: "Nulidade 1: Prazos", answer: "<strong>Cerceamento de Defesa.</strong><br>Delatado deve falar DEPOIS do delator (prazo sucessivo, não comum).<br>Súmula Vinculante ou Jurisprudência STF." },
                     { label: "Nulidade 2: Juiz", answer: "<strong>Violação à Identidade Física do Juiz.</strong><br>Art. 399, §2º CPP. Quem colheu a prova deve julgar, salvo exceções legais." },
                     { label: "Mérito", answer: "<strong>Absolvição (Falta de Provas).</strong><br>Palavra do colaborador isolada não basta para condenar.<br>Art. 4º, §16, Lei 12.850/13." }
+                ]
+            },
+            "40exame": {
+                context: "Gustavo (entregador) praticou furto de uso de bicicletas por 7 dias (pegava e devolvia intacta). No 8º dia, porta estava aberta (entrou sem escalar) e bicicleta foi destruída por acidente. MP denunciou por Furto Qualificado.",
+                steps: [
+                    { label: "Qual a Peça Cabível?", answer: "<strong>Apelação</strong> (Art. 593, I, CPP)." },
+                    { label: "Mérito (Fatos 1 a 7)", answer: "<strong>Atipicidade (Furto de Uso).</strong><br>Havia intenção de devolver e a coisa foi restituída intacta. Não há ânimo de assenhoreamento." },
+                    { label: "Mérito (Fato 8)", answer: "<strong>Desclassificação para Furto Simples.</strong><br>Porta aberta não configura qualificado pela escalada (Art. 155, §4º CP)." },
+                    { label: "Causa de Diminuição", answer: "<strong>Arrependimento Posterior.</strong><br>Se houve reparação do dano antes da denúncia (nos casos aplicáveis) ou tese subsidiária de crime continuado." }
+                ]
+            },
+            "39exame": {
+                context: "Luíza e Alfredo (casados) em cruzeiro. Alfredo agrediu Luíza em águas internacionais/deslocamento. Aportaram em Flores (CB). MP Estadual denunciou na Vara de Violência Doméstica. Juiz Estadual aceitou.",
+                steps: [
+                    { label: "Qual a Peça Cabível?", answer: "<strong>Apelação</strong> (Art. 593, I, CPP)." },
+                    { label: "Preliminar de Nulidade", answer: "<strong>Incompetência da Justiça Estadual.</strong><br>Crimes a bordo de navios em deslocamento internacional são de competência da Justiça Federal (Art. 109, IX, CF)." },
+                    { label: "Subsidiária: Dosimetria", answer: "<strong>Pena-base no Mínimo.</strong><br>Afastar agravantes genéricas se constituem bis in idem com causas de aumento." },
+                    { label: "Pedidos", answer: "Anulação do processo ab initio (Incompetência) ou redução da pena e regime aberto." }
                 ]
             }
         };
