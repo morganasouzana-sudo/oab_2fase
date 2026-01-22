@@ -28,6 +28,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden; /* Evita rolagem na página inteira */
         }
 
         /* --- HEADER --- */
@@ -39,6 +40,7 @@
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.03);
             z-index: 10;
+            flex-shrink: 0; /* Header não encolhe */
         }
 
         h1 { margin: 0; font-size: 1.1rem; color: var(--primary); font-weight: 700; letter-spacing: 0.5px; }
@@ -63,11 +65,13 @@
         main {
             flex: 1;
             padding: 20px;
-            padding-bottom: 90px;
-            overflow-y: auto;
+            padding-bottom: 80px; /* Espaço seguro para navbar */
+            overflow-y: auto; /* Rolagem interna apenas no conteúdo */
             max-width: 600px;
             margin: 0 auto;
             width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .hidden { display: none !important; }
@@ -96,9 +100,9 @@
 
         /* --- MODO WIZARD (ESQUELETO ZEN) --- */
         .wizard-container {
-            display: flex; /* Correção do bug: Flex por padrão, hidden oculta */
+            display: flex;
             flex-direction: column;
-            height: 100%;
+            flex: 1;
         }
 
         .progress-bar-container {
@@ -108,6 +112,7 @@
             border-radius: 4px;
             margin-bottom: 25px;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .progress-fill {
@@ -127,6 +132,8 @@
             animation: slideIn 0.4s ease;
             position: relative;
             border: 1px solid #EDF2F7;
+            flex: 1; /* Ocupa espaço disponível */
+            justify-content: center; /* Centraliza verticalmente */
         }
 
         @keyframes slideIn {
@@ -204,13 +211,24 @@
             padding: 5px;
         }
 
-        /* --- FLASHCARDS --- */
+        /* --- FLASHCARDS (CORREÇÃO DE LAYOUT) --- */
         .flashcard-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1; /* Ocupa altura restante */
+            margin-top: 10px;
             perspective: 1000px;
-            height: 400px;
-            margin-top: 20px;
+            min-height: 0; /* Permite encolher se necessário */
         }
         
+        /* Contêiner da carta (Cena 3D) */
+        .flashcard-scene {
+            flex: 1; /* Cresce para ocupar espaço */
+            position: relative;
+            min-height: 300px; /* Altura mínima garantida */
+            margin-bottom: 20px;
+        }
+
         .flashcard-inner {
             position: relative;
             width: 100%;
@@ -237,10 +255,20 @@
             justify-content: center;
             align-items: center;
             background: var(--card-bg);
+            /* Scroll interno se texto for muito longo */
+            overflow-y: auto; 
         }
         
         .fc-front { border-bottom: 6px solid var(--secondary); }
         .fc-back { background: var(--primary); color: white; transform: rotateY(180deg); border-bottom: 6px solid #ED8936; }
+
+        /* Botões de controle do Flashcard fixos na parte inferior da área principal */
+        .fc-controls {
+            display: flex; 
+            gap: 10px; 
+            margin-top: auto; /* Empurra para baixo */
+            flex-shrink: 0;
+        }
 
         /* --- NAVEGAÇÃO INFERIOR --- */
         .bottom-nav {
@@ -329,24 +357,29 @@
                 <div class="progress-fill" id="progress-bar"></div>
             </div>
 
-            <div id="step-card-container">
+            <div id="step-card-container" style="flex: 1; display: flex; flex-direction: column;">
                 <!-- Conteúdo injetado via JS -->
             </div>
         </div>
 
         <!-- MODO FLASHCARDS -->
         <div id="flashcard-screen" class="flashcard-container hidden">
-            <div class="flashcard-inner" id="card-inner" onclick="flipCard()">
-                <div class="fc-front">
-                    <span style="background:var(--secondary); color:white; padding:5px 12px; border-radius:15px; font-size:0.7rem; margin-bottom:15px; font-weight:bold; letter-spacing: 1px;">TOQUE PARA VIRAR</span>
-                    <p id="fc-q" style="font-size: 1.2rem; font-weight:600; line-height: 1.5; color: var(--text);">Pergunta...</p>
-                </div>
-                <div class="fc-back">
-                    <h3 style="color: white; opacity:0.9; font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; letter-spacing: 1px;">Gabarito Oficial</h3>
-                    <p id="fc-a" style="font-size: 1.1rem; line-height:1.6;">Resposta...</p>
+            <!-- Cena 3D isolada -->
+            <div class="flashcard-scene">
+                <div class="flashcard-inner" id="card-inner" onclick="flipCard()">
+                    <div class="fc-front">
+                        <span style="background:var(--secondary); color:white; padding:5px 12px; border-radius:15px; font-size:0.7rem; margin-bottom:15px; font-weight:bold; letter-spacing: 1px;">TOQUE PARA VIRAR</span>
+                        <p id="fc-q" style="font-size: 1.2rem; font-weight:600; line-height: 1.5; color: var(--text);">Pergunta...</p>
+                    </div>
+                    <div class="fc-back">
+                        <h3 style="color: white; opacity:0.9; font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; letter-spacing: 1px;">Gabarito Oficial</h3>
+                        <p id="fc-a" style="font-size: 1.1rem; line-height:1.6;">Resposta...</p>
+                    </div>
                 </div>
             </div>
-            <div style="display:flex; gap:10px; margin-top:20px;">
+            
+            <!-- Botões fixos embaixo -->
+            <div class="fc-controls">
                 <button class="btn-nav btn-prev" onclick="nextCard()">Revisar Depois</button>
                 <button class="btn-nav btn-next" onclick="nextCard()">Acertei <i class="fas fa-check"></i></button>
             </div>
