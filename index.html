@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OAB Penal - Estudo Focado</title>
+    <style>
+        /* --- DESIGN RESPONSIVO MOBILE FIRST --- */
+        :root {
+            --primary: #2C3E50;
+            --secondary: #27ae60;
+            --accent: #e67e22;
+            --bg: #F0F2F5;
+            --card-bg: #FFFFFF;
+            --text: #333;
+            --error: #c0392b;
+        }
+
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); padding-bottom: 50px; }
+
+        /* Header Fixo */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+
+        /* Botão Zen */
+        .btn-zen {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+        }
+        .btn-zen:active { background: rgba(255,255,255,0.3); transform: scale(0.95); }
+
+        /* Abas de Navegação */
+        .nav-tabs {
+            display: flex;
+            margin: 15px 10px;
+            gap: 10px;
+            background: #e0e0e0;
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            color: #666;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Área de Conteúdo */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: none; 
+            animation: fadeIn 0.3s ease;
+        }
+        .container.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ESQUELETO (Peças) */
+        select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            appearance: none; /* Remove estilo padrão iOS */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 12px auto;
+        }
+
+        .skeleton-block {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border-left: 5px solid var(--secondary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .skeleton-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .skeleton-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #FAFAFA;
+            margin-bottom: 10px;
+        }
+        .skeleton-input:focus { outline: 2px solid var(--secondary); border-color: transparent; }
+
+        .btn-dica {
+            width: 100%;
+            padding: 10px;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .hint-text {
+            display: none;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.5;
+            padding: 10px;
+            background: #F1F8E9;
+            border-radius: 6px;
+        }
+
+        /* FLASHCARDS */
+        .flashcard-scene {
+            perspective: 1000px;
+            height: 380px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 16px;
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            border-radius: 16px;
+            background: var(--card-bg);
+            overflow-y: auto;
+        }
+
+        .card-front { border-bottom: 6px solid var(--primary); }
+        .card-back { background: var(--primary); color: white; transform: rotateY(180deg); border-bottom: 6px solid var(--accent); }
+
+        .controls { display: flex; gap: 12px; }
+        .btn-control {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+        .btn-control:active { transform: scale(0.98); }
+        .btn-rev { background: #ff7675; color: white; }
+        .btn-next { background: var(--secondary); color: white; }
+
+        /* MODAL ANSIEDADE */
+        #zen-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(240, 242, 245, 0.98);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .circle {
+            width: 140px; height: 140px;
+            background: var(--secondary); border-radius: 50%;
+            animation: breathe 8s infinite ease-in-out;
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-weight: bold; font-size: 1.3rem;
+            box-shadow: 0 0 40px rgba(39, 174, 96, 0.4);
+        }
+        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.5); opacity: 1; } }
+        .close-zen {
+            margin-top: 50px; padding: 12px 30px;
+            border: 2px solid var(--primary); color: var(--primary);
+            background: transparent; border-radius: 30px;
+            font-weight: bold; font-size: 1rem; cursor: pointer;
+        }
+        
+        #error-msg { 
+            background: #ffebee; color: #c62828; 
+            padding: 15px; margin: 15px; border-radius: 8px; 
+            text-align: center; display: none; border: 1px solid #ef9a9a;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>⚖️ Penal OAB - App</h1>
+        <button class="btn-zen" onclick="toggleZenMode()">Calma</button>
+    </header>
+
+    <div id="error-msg"></div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('esqueleto')">Esqueleto</button>
+        <button class="tab-btn" onclick="switchTab('flashcard')">Questões</button>
+    </div>
+
+    <!-- ÁREA DAS PEÇAS -->
+    <div id="tab-esqueleto" class="container active">
+        <select id="piece-selector" onchange="loadPiece()">
+            <option value="">Selecione uma Peça...</option>
+        </select>
+        <div id="skeleton-area"></div>
+    </div>
+
+    <!-- ÁREA DOS FLASHCARDS -->
+    <div id="tab-flashcard" class="container">
+        <div class="flashcard-scene" onclick="flipCard()">
+            <div class="flashcard" id="card">
+                <div class="card-face card-front">
+                    <span style="background:#e67e22; color:white; padding:4px 8px; border-radius:4px; font-size:0.75rem; margin-bottom:15px; font-weight:bold;">TOQUE PARA VIRAR</span>
+                    <p id="card-question" style="font-size: 1.2rem; font-weight:600; line-height: 1.4;">Carregando...</p>
+                </div>
+                <div class="card-face card-back">
+                    <h3 style="color:#bdc3c7; text-transform:uppercase; font-size:0.8rem; margin-bottom:15px;">Gabarito Oficial</h3>
+                    <p id="card-answer" style="font-size: 1.1rem; line-height:1.6;">Resposta</p>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="btn-control btn-rev" onclick="nextCard()">Revisar</button>
+            <button class="btn-control btn-next" onclick="nextCard()">Acertei</button>
+        </div>
+        <p style="text-align: center; color: #999; font-size: 0.8rem; margin-top: 15px;">Baseado nos Últimos Exames</p>
+    </div>
+
+    <!-- TELA DE ANSIEDADE -->
+    <div id="zen-overlay">
+        <div class="circle"><span id="breath-instruction">Inspire</span></div>
+        <div style="margin-top: 30px; text-align: center; color: #555; padding: 0 20px;">Siga o ritmo da respiração.<br>Isso vai baixar sua adrenalina.</div>
+        <button class="close-zen" onclick="toggleZenMode()">Voltar aos Estudos</button>
+    </div>
+
+    <!-- IMPORTAÇÃO DOS DADOS -->
+    <script src="dados.js" onerror="showError()"></script>
+
+    <script>
+        let db_pecas = {};
+        let db_flashcards = [];
+
+        window.onload = function() {
+            if (typeof OAB_DATA !== 'undefined') {
+                db_pecas = OAB_DATA.pecas;
+                db_flashcards = OAB_DATA.flashcards;
+                initApp();
+            } else {
+                showError();
+            }
+        };
+
+        function showError() {
+            const msg = document.getElementById('error-msg');
+            msg.style.display = 'block';
+            msg.innerHTML = "<strong>Erro de Carregamento:</strong><br>O arquivo 'dados.js' não foi encontrado na mesma pasta.<br>Verifique se os nomes dos arquivos estão corretos no GitHub.";
+        }
+
+        function initApp() {
+            const selector = document.getElementById('piece-selector');
+            
+            // Popula o seletor com as peças disponíveis no arquivo de dados
+            for (const key in db_pecas) {
+                const option = document.createElement('option');
+                option.value = key;
+                // Formatação simples do nome da peça para exibição (ex: 44exame -> 44º Exame)
+                const label = key.replace("exame", "º Exame"); 
+                option.text = "Peça: " + label;
+                selector.appendChild(option);
+            }
+            if(Object.keys(db_pecas).length > 0) {
+                selector.selectedIndex = 1; // Seleciona o primeiro item real (índice 0 é o placeholder)
+                loadPiece();
+            }
+            renderCard();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function loadPiece() {
+            const key = document.getElementById('piece-selector').value;
+            const area = document.getElementById('skeleton-area');
+            area.innerHTML = '';
+            if (!key || !db_pecas[key]) return;
+
+            db_pecas[key].forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'skeleton-block';
+                div.innerHTML = `
+                    <div class="skeleton-label">${item.label}</div>
+                    <input type="text" class="skeleton-input" placeholder="Digite a tese aqui...">
+                    <button class="btn-dica" onclick="this.nextElementSibling.style.display='block'">Ver Gabarito</button>
+                    <div class="hint-text">${item.hint}</div>
+                `;
+                area.appendChild(div);
+            });
+        }
+
+        let currentCardIndex = 0;
+
+        function renderCard() {
+            if (db_flashcards.length === 0) return;
+            const cardData = db_flashcards[currentCardIndex];
+            document.getElementById('card-question').innerHTML = cardData.q;
+            document.getElementById('card-answer').innerHTML = cardData.a;
+            document.getElementById('card').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('card').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            const card = document.getElementById('card');
+            card.style.opacity = '0';
+            setTimeout(() => {
+                let next = Math.floor(Math.random() * db_flashcards.length);
+                if(db_flashcards.length > 1 && next === currentCardIndex) {
+                    next = (next + 1) % db_flashcards.length;
+                }
+                currentCardIndex = next;
+                renderCard();
+                card.style.opacity = '1';
+            }, 300);
+        }
+
+        function toggleZenMode() {
+            const overlay = document.getElementById('zen-overlay');
+            const instruction = document.getElementById('breath-instruction');
+            if (overlay.style.display === 'flex') {
+                overlay.style.display = 'none';
+            } else {
+                overlay.style.display = 'flex';
+                const breathCycle = () => {
+                   if(overlay.style.display === 'none') return;
+                   instruction.innerText = "Inspire";
+                   setTimeout(() => { instruction.innerText = "Segure"; }, 4000);
+                   setTimeout(() => { instruction.innerText = "Expire"; }, 6000);
+                   setTimeout(() => { if(overlay.style.display !== 'none') breathCycle(); }, 8000);
+                }
+                breathCycle();
+            }
+        }
+    </script>
+</body>
+</html>
+```
+
+### Instruções Finais:
+1.  Garanta que na mesma pasta existam apenas estes dois arquivos: `index.html` e `dados.js`.
+2.  Para testar no **notebook**: Basta dar dois cliques no `index.html`.
+3.  Para testar no **celular**: Coloque no GitHub Pages (como conversamos) ou envie o arquivo `index.html` e `dados.js` para você mesma e abra, mas a experiência via GitHub será muito superior (parecerá um app real).
+
+Boa sorte nos estudos com sua amiga! Estou à disposição se precisarem de mais alguma coisa.
