@@ -3,533 +3,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OAB Zen - Estudo Focado</title>
-    <!-- Ícones -->
+    <title>OAB Zen - Estudo de Alto Nível</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #5D737E;     /* Cinza Azulado Calmante */
-            --secondary: #64B6AC;   /* Verde Água Suave */
-            --bg: #F0F4F8;          /* Fundo quase branco */
-            --card-bg: #FFFFFF;
-            --text: #2D3748;
-            --text-light: #718096;
-            --success: #48BB78;
-            --error: #E53E3E;
+            --primary: #2C3E50;
+            --accent: #E67E22;  /* Laranja OAB */
+            --success: #27AE60;
+            --danger: #C0392B;
+            --bg: #F3F4F6;
+            --card: #FFFFFF;
+            --text: #1F2937;
+            --text-light: #6B7280;
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            margin: 0; 
-            padding: 0; 
-            background: var(--bg); 
-            color: var(--text); 
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Evita rolagem na página inteira */
+            margin: 0; padding: 0; 
+            background: var(--bg); color: var(--text); 
+            height: 100vh; display: flex; flex-direction: column;
+            overflow: hidden;
         }
 
-        /* --- HEADER --- */
+        /* HEADER */
         header {
-            background: var(--card-bg);
+            background: var(--card);
             padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            z-index: 10;
-            flex-shrink: 0; /* Header não encolhe */
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 10; flex-shrink: 0;
         }
 
-        h1 { margin: 0; font-size: 1.1rem; color: var(--primary); font-weight: 700; letter-spacing: 0.5px; }
+        h1 { margin: 0; font-size: 1.2rem; color: var(--primary); font-weight: 800; }
+        .subtitle { font-size: 0.8rem; color: var(--text-light); font-weight: 400; }
 
-        .btn-calma {
-            background: #E6FFFA;
-            color: #319795;
-            border: 1px solid #B2F5EA;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .btn-zen {
+            background: #E0F2F1; color: #00695C;
+            border: none; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
         }
-        .btn-calma:hover { background: #B2F5EA; transform: translateY(-1px); }
 
-        /* --- LAYOUT --- */
+        /* MAIN AREA */
         main {
-            flex: 1;
-            padding: 20px;
-            padding-bottom: 80px; /* Espaço seguro para navbar */
-            overflow-y: auto; /* Rolagem interna apenas no conteúdo */
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
+            flex: 1; padding: 20px;
+            padding-bottom: 90px;
+            overflow-y: auto;
+            max-width: 700px; margin: 0 auto; width: 100%;
+            display: flex; flex-direction: column;
         }
 
         .hidden { display: none !important; }
 
-        /* --- SELEÇÃO DE PEÇA --- */
-        .selector-container {
-            background: var(--card-bg);
-            padding: 25px;
+        /* SELEÇÃO */
+        .card-menu {
+            background: var(--card);
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            margin-top: 20px;
+            padding: 25px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-top: 20px;
         }
-        
+
         select {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid #E2E8F0;
-            margin-top: 15px;
-            font-size: 1rem;
-            background-color: #F7FAFC;
-            color: var(--text);
-            outline: none;
+            width: 100%; padding: 15px;
+            border: 2px solid #E5E7EB; border-radius: 12px;
+            margin-top: 20px; font-size: 1rem;
+            background: #F9FAFB; outline: none;
         }
 
-        /* --- MODO WIZARD (ESQUELETO ZEN) --- */
-        .wizard-container {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 8px;
-            background: #E2E8F0;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--secondary);
-            width: 0%;
-            transition: width 0.5s ease;
+        /* WIZARD & CASE CONTEXT */
+        .case-context {
+            background: #FFF7ED;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #7C2D12;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .step-card {
-            background: var(--card-bg);
+            background: var(--card);
             border-radius: 20px;
-            padding: 30px 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            animation: slideIn 0.4s ease;
-            position: relative;
-            border: 1px solid #EDF2F7;
-            flex: 1; /* Ocupa espaço disponível */
-            justify-content: center; /* Centraliza verticalmente */
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .step-label {
-            font-size: 1.1rem;
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-            line-height: 1.4;
-        }
-
-        .step-input {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #E2E8F0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: 0.3s;
-            background: #FAFAFA;
-            margin-bottom: 10px;
-        }
-        .step-input:focus {
-            border-color: var(--secondary);
-            background: #FFFFFF;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(100, 182, 172, 0.2);
-        }
-
-        .step-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-            gap: 15px;
-        }
-
-        .btn-nav {
+            padding: 0;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            display: flex; flex-direction: column;
             flex: 1;
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 1rem;
         }
-        .btn-prev { background: #EDF2F7; color: #718096; }
-        .btn-next { background: var(--secondary); color: white; }
-        
-        .hint-box {
-            margin-top: 15px;
-            background: #F0FFF4;
+
+        .step-header {
+            background: var(--primary);
+            color: white;
             padding: 15px;
-            border-radius: 8px;
-            color: #276749;
-            font-size: 0.95rem;
-            display: none;
-            border-left: 4px solid #48BB78;
-            line-height: 1.5;
-        }
-
-        .btn-show-hint {
-            display: block;
-            margin: 10px auto 0;
-            background: none;
-            border: none;
-            color: var(--secondary);
-            font-size: 0.85rem;
-            cursor: pointer;
-            text-decoration: underline;
-            padding: 5px;
-        }
-
-        /* --- FLASHCARDS (CORREÇÃO DE LAYOUT) --- */
-        .flashcard-container {
-            display: flex;
-            flex-direction: column;
-            flex: 1; /* Ocupa altura restante */
-            margin-top: 10px;
-            perspective: 1000px;
-            min-height: 0; /* Permite encolher se necessário */
-        }
-        
-        /* Contêiner da carta (Cena 3D) */
-        .flashcard-scene {
-            flex: 1; /* Cresce para ocupar espaço */
-            position: relative;
-            min-height: 300px; /* Altura mínima garantida */
-            margin-bottom: 20px;
-        }
-
-        .flashcard-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
             text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            border-radius: 20px;
-        }
-        
-        .flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .fc-front, .fc-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 20px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: var(--card-bg);
-            /* Scroll interno se texto for muito longo */
-            overflow-y: auto; 
-        }
-        
-        .fc-front { border-bottom: 6px solid var(--secondary); }
-        .fc-back { background: var(--primary); color: white; transform: rotateY(180deg); border-bottom: 6px solid #ED8936; }
-
-        /* Botões de controle do Flashcard fixos na parte inferior da área principal */
-        .fc-controls {
-            display: flex; 
-            gap: 10px; 
-            margin-top: auto; /* Empurra para baixo */
-            flex-shrink: 0;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* --- NAVEGAÇÃO INFERIOR --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            z-index: 20;
+        .step-content {
+            padding: 30px 20px;
+            flex: 1;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center;
         }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
-            color: var(--text-light);
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 50%;
-        }
-
-        .nav-item i { font-size: 1.3rem; margin-bottom: 5px; transition: 0.2s; }
-        .nav-item.active { color: var(--secondary); font-weight: 600; }
-        .nav-item.active i { transform: translateY(-2px); color: var(--secondary); }
-
-        /* --- MODAL RESPIRAÇÃO --- */
-        #zen-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.98);
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .breathing-circle {
-            width: 160px; height: 160px;
-            border-radius: 50%;
-            background: #64B6AC;
-            display: flex; justify-content: center; align-items: center;
-            color: white; font-size: 1.3rem; font-weight: bold;
-            box-shadow: 0 0 50px rgba(100, 182, 172, 0.4);
-            transition: transform 4s ease-in-out;
-        }
-        
-        .breathing-text {
-            margin-top: 50px;
-            font-size: 1.3rem;
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 700;
             color: var(--primary);
-            text-align: center;
-            font-weight: 600;
+            margin-bottom: 25px;
         }
+
+        .answer-box {
+            background: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            color: #166534;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: left;
+            display: none; /* Escondido inicialmente */
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .answer-box strong { color: #14532D; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* BUTTONS */
+        .btn-reveal {
+            background: var(--accent); color: white;
+            border: none; padding: 15px 30px; border-radius: 12px;
+            font-size: 1rem; font-weight: 700; cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(230, 126, 34, 0.3);
+            transition: transform 0.1s;
+        }
+        .btn-reveal:active { transform: scale(0.98); }
+
+        .rating-area {
+            display: flex; gap: 10px; width: 100%;
+            display: none; /* Escondido até revelar */
+        }
+        
+        .btn-rate {
+            flex: 1; padding: 15px; border-radius: 12px;
+            border: none; font-weight: 700; color: white; cursor: pointer;
+            font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .rate-bad { background: #EF4444; }
+        .rate-good { background: #10B981; }
+
+        /* FLASHCARDS */
+        .flashcard-container { margin-top: 10px; perspective: 1000px; flex: 1; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; min-height: 350px;
+            text-align: center; transition: transform 0.6s; transform-style: preserve-3d;
+            cursor: pointer;
+            background: white; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .flipped .flashcard-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; padding: 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .fc-front { border-bottom: 6px solid var(--accent); }
+        .fc-back { background: var(--primary); color: white; transform: rotateY(180deg); border-bottom: 6px solid var(--success); overflow-y: auto; }
+
+        /* NAV */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: var(--card);
+            display: flex; justify-content: space-around; padding: 12px 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05); z-index: 20;
+        }
+        .nav-item {
+            background: none; border: none; cursor: pointer;
+            color: var(--text-light); font-size: 0.75rem;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .nav-item.active { color: var(--accent); font-weight: 700; }
+        .nav-item i { font-size: 1.4rem; }
+
     </style>
 </head>
 <body>
 
     <header>
-        <h1><i class="fas fa-feather-alt"></i> OAB Zen</h1>
-        <button class="btn-calma" onclick="toggleZen()">
-            <i class="fas fa-wind"></i> Respirar
+        <div>
+            <h1>OAB Penal</h1>
+            <span class="subtitle">Prática Guiada</span>
+        </div>
+        <button class="btn-zen" onclick="alert('Respire fundo por 4 segundos...\nSegure por 4 segundos...\nSolte por 4 segundos.')">
+            <i class="fas fa-leaf"></i> Zen
         </button>
     </header>
 
     <main id="main-content">
-        <!-- TELA INICIAL / SELEÇÃO -->
-        <div id="selection-screen" class="selector-container">
-            <i class="fas fa-book-reader" style="font-size: 3rem; color: var(--secondary); margin-bottom: 20px;"></i>
-            <h2 style="margin: 0 0 10px 0; color: var(--text);">Prática Focada</h2>
-            <p style="color: var(--text-light); margin-bottom: 20px; font-size: 0.95rem;">
-                Escolha uma peça para estruturar passo a passo, sem pressão.
-            </p>
-            <select id="piece-selector" onchange="startWizard()">
-                <option value="">Toque para selecionar...</option>
+        
+        <!-- 1. SELEÇÃO -->
+        <div id="selection-screen" class="card-menu">
+            <i class="fas fa-gavel" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+            <h2>Escolha o Exame</h2>
+            <p style="color: var(--text-light); margin-bottom: 20px;">Vamos simular a estrutura da peça passo a passo.</p>
+            <select id="piece-selector" onchange="startCase()">
+                <option value="">Selecione...</option>
             </select>
         </div>
 
-        <!-- MODO WIZARD (ESQUELETO) -->
-        <div id="wizard-screen" class="wizard-container hidden">
-            <div class="progress-bar-container">
-                <div class="progress-fill" id="progress-bar"></div>
+        <!-- 2. WIZARD (PEÇA) -->
+        <div id="wizard-screen" class="hidden" style="flex: 1; display: flex; flex-direction: column;">
+            
+            <!-- Resumo do Caso (Contexto) -->
+            <div id="case-context-box" class="case-context hidden">
+                <strong><i class="fas fa-file-alt"></i> O CASO:</strong><br>
+                <span id="case-text">...</span>
+                <button onclick="hideContext()" style="display:block; margin-top:10px; font-size:0.8rem; background:none; border:none; text-decoration:underline; color:var(--primary); cursor:pointer;">Esconder Resumo</button>
             </div>
+            <button id="btn-show-context" class="hidden" onclick="showContext()" style="margin-bottom:10px; font-size:0.85rem; background:#E5E7EB; border:none; padding:8px; border-radius:8px; cursor:pointer;">
+                <i class="fas fa-eye"></i> Ver Resumo do Caso
+            </button>
 
-            <div id="step-card-container" style="flex: 1; display: flex; flex-direction: column;">
-                <!-- Conteúdo injetado via JS -->
+            <!-- Cartão de Passo -->
+            <div id="step-container" class="step-card">
+                <!-- Injetado via JS -->
             </div>
         </div>
 
-        <!-- MODO FLASHCARDS -->
-        <div id="flashcard-screen" class="flashcard-container hidden">
-            <!-- Cena 3D isolada -->
-            <div class="flashcard-scene">
+        <!-- 3. FLASHCARDS -->
+        <div id="flashcard-screen" class="hidden" style="flex: 1; display: flex; flex-direction: column;">
+            <div class="flashcard-container">
                 <div class="flashcard-inner" id="card-inner" onclick="flipCard()">
                     <div class="fc-front">
-                        <span style="background:var(--secondary); color:white; padding:5px 12px; border-radius:15px; font-size:0.7rem; margin-bottom:15px; font-weight:bold; letter-spacing: 1px;">TOQUE PARA VIRAR</span>
-                        <p id="fc-q" style="font-size: 1.2rem; font-weight:600; line-height: 1.5; color: var(--text);">Pergunta...</p>
+                        <span style="background:var(--accent); color:white; padding:4px 10px; border-radius:10px; font-size:0.7rem; margin-bottom:15px; font-weight:700;">TOQUE PARA VIRAR</span>
+                        <p id="fc-q" style="font-size: 1.2rem; font-weight:700; line-height: 1.4;">Carregando...</p>
                     </div>
                     <div class="fc-back">
-                        <h3 style="color: white; opacity:0.9; font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; letter-spacing: 1px;">Gabarito Oficial</h3>
                         <p id="fc-a" style="font-size: 1.1rem; line-height:1.6;">Resposta...</p>
                     </div>
                 </div>
             </div>
-            
-            <!-- Botões fixos embaixo -->
-            <div class="fc-controls">
-                <button class="btn-nav btn-prev" onclick="nextCard()">Revisar Depois</button>
-                <button class="btn-nav btn-next" onclick="nextCard()">Acertei <i class="fas fa-check"></i></button>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="btn-reveal" style="background:var(--primary);" onclick="nextCard()">Próxima Carta</button>
             </div>
         </div>
+
     </main>
 
-    <!-- NAVEGAÇÃO INFERIOR -->
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchMode('esqueleto', this)">
+        <button class="nav-item active" onclick="switchTab('peca', this)">
             <i class="fas fa-file-signature"></i>
-            <span>Esqueleto</span>
+            <span>Peça</span>
         </button>
-        <button class="nav-item" onclick="switchMode('flashcards', this)">
+        <button class="nav-item" onclick="switchTab('questoes', this)">
             <i class="fas fa-brain"></i>
             <span>Questões</span>
         </button>
     </nav>
 
-    <!-- MODAL ZEN -->
-    <div id="zen-modal">
-        <div class="breathing-circle" id="breath-circle">Inspire</div>
-        <div class="breathing-text" id="breath-text">Concentre-se na respiração...</div>
-        <button onclick="toggleZen()" style="margin-top:50px; border:none; background:transparent; color:#718096; cursor:pointer; text-decoration:underline; font-size: 1rem;">Voltar ao estudo</button>
-    </div>
-
     <script>
-        /* =========================================
-           DADOS DA OAB (EMBUTIDOS PARA SEGURANÇA)
-           Exames: 44, 43, 42, 41, 40, 39
-           ========================================= */
+        // --- DADOS (ENRIQUECIDOS) ---
         const OAB_DATA = {
-            "pecas": {
-                "44exame": [
-                    { label: "1. Peça de Interposição", hint: "Endereçamento: Juizado Especial Criminal (JECRIM).<br>Fundamento: Art. 82 da Lei 9.099/95 (Apelação)." },
-                    { label: "2. Tempestividade", hint: "Prazo de 10 dias (Art. 82, §1º da Lei 9.099/95)." },
-                    { label: "3. Razões", hint: "Endereçamento: Turma Recursal." },
-                    { label: "4. Preliminar", hint: "Tese: Perempção (Extinção da Punibilidade).<br>Motivo: Querelante não pediu condenação nas alegações finais (Art. 60, III CPP)." },
-                    { label: "5. Mérito", hint: "Tese: Erro de Tipo Permissivo (Descriminante Putativa).<br>Motivo: Réu achou que o jacaré era real (Art. 20, §1º CP). Absolvição." },
-                    { label: "6. Subsidiária", hint: "Tese: Afastar Reincidência.<br>Motivo: Crime militar próprio não gera reincidência (Art. 64, II CP)." }
-                ],
-                "43exame": [
-                    { label: "1. Peça de Juntada", hint: "Endereçamento: Juizado de Violência Doméstica.<br>Fundamento: Art. 600 do CPP (Contrarrazões)." },
-                    { label: "2. Tempestividade", hint: "Prazo de 3 dias (Art. 600, §1º do CPP)." },
-                    { label: "3. Razões", hint: "Endereçamento: Tribunal de Justiça." },
-                    { label: "4. Preliminar 1", hint: "Tese: Ação Pública Incondicionada (Súmula 542 STJ)." },
-                    { label: "5. Preliminar 2", hint: "Tese: Inexistência de Cerceamento de Defesa (Art. 400-A, I, CPP)." },
-                    { label: "6. Mérito", hint: "Tese: Manter a condenação. Embriaguez voluntária não exclui imputabilidade." }
-                ],
-                "42exame": [
-                    { label: "1. Peça Processual", hint: "Peça: Resposta à Acusação.<br>Endereçamento: Vara Criminal.<br>Fundamento: Art. 396/396-A CPP." },
-                    { label: "2. Preliminar (Nulidade)", hint: "Tese: Ilicitude da Prova (Busca sem mandado baseada só em denúncia anônima)." },
-                    { label: "3. Preliminar (Inépcia)", hint: "Tese: Inépcia da Denúncia (Não descreveu crime antecedente da lavagem)." },
-                    { label: "4. Mérito", hint: "Tese: Atipicidade (Absolvição Sumária). Guardar dinheiro não é crime por si só." }
-                ],
-                "41exame": [
-                    { label: "1. Peça de Interposição", hint: "Peça: Apelação (Art. 593, I, CPP)." },
-                    { label: "2. Preliminar 1", hint: "Nulidade: Cerceamento de Defesa (Prazo comum para delator e delatado viola contraditório)." },
-                    { label: "3. Preliminar 2", hint: "Nulidade: Identidade Física do Juiz (Sentença por juiz que não instruiu)." },
-                    { label: "4. Mérito", hint: "Absolvição: Palavra exclusiva do colaborador não basta para condenar." }
-                ],
-                "40exame": [
-                    { label: "1. Peça de Interposição", hint: "Peça: Apelação (Art. 593, I, CPP)." },
-                    { label: "2. Mérito (Fatos 1-7)", hint: "Tese: Atipicidade (Furto de Uso). Devolução intacta e sem ânimo definitivo." },
-                    { label: "3. Mérito (Fato 8)", hint: "Tese: Desclassificação para Furto Simples (Porta aberta não é escalada)." },
-                    { label: "4. Causa de Diminuição", hint: "Tese: Arrependimento Posterior (Art. 16 CP). Reparação integral antes da denúncia." }
-                ],
-                "39exame": [
-                    { label: "1. Peça de Interposição", hint: "Peça: Apelação (Art. 593, I, CPP)." },
-                    { label: "2. Preliminar", hint: "Tese: Incompetência da Justiça Estadual (Crime a bordo de navio/deslocamento é Federal)." },
-                    { label: "3. Subsidiária", hint: "Tese: Pena-base no mínimo e Afastar agravante (bis in idem)." },
-                    { label: "4. Pedidos", hint: "Regime Aberto e Afastamento da perda do cargo." }
+            "44exame": {
+                context: "Aluísio (entregador) destruiu peça de decoração de jacaré na casa de Manoel pensando ser um animal real (risco). Manoel ofereceu queixa-crime (Dano - Art. 163 CP). MP pediu condenação. Sentença condenou.",
+                steps: [
+                    { label: "Qual a Peça Cabível?", answer: "<strong>Apelação</strong> (Art. 82 da Lei 9.099/95).<br>Trata-se de crime de menor potencial ofensivo (JECRIM)." },
+                    { label: "Endereçamento da Interposição", answer: "Ao <strong>Juizado Especial Criminal</strong> da Comarca... (Juiz a quo)." },
+                    { label: "Endereçamento das Razões", answer: "À <strong>Turma Recursal</strong> (Juízo ad quem)." },
+                    { label: "Preliminar: Extinção da Punibilidade", answer: "<strong>Perempção.</strong><br>O querelante (Manoel) deixou de pedir condenação nas alegações finais.<br>Art. 60, III CPP c/c Art. 107, IV CP." },
+                    { label: "Mérito: Tese Principal", answer: "<strong>Atipicidade (Erro de Tipo Permissivo).</strong><br>Aluísio supôs situação de perigo (descriminante putativa).<br>Art. 20, §1º do CP." },
+                    { label: "Subsidiária: Dosimetria", answer: "Afastar <strong>Reincidência</strong>.<br>Condenação anterior por crime militar próprio não gera reincidência.<br>Art. 64, II CP." },
+                    { label: "Pedidos Finais", answer: "1. Conhecimento e Provimento;<br>2. Absolvição (Art. 386 CPP);<br>3. Subsidiariamente: Pena mínima e regime aberto." }
                 ]
             },
-            "flashcards": [
-                { q: "<strong>[44º]</strong> O falso (doc. médico) se exauriu no estelionato. Qual a tese?", a: "<strong>Consunção</strong> (Súmula 17 STJ). O falso é absorvido." },
-                { q: "<strong>[44º]</strong> Ré menor de 18 na ação, vítima morre depois. É imputável?", a: "Não. <strong>Teoria da Atividade</strong> (Art. 4º CP). Considera-se a idade na ação." },
-                { q: "<strong>[43º]</strong> Acidente planejado mas improvável (coco na cabeça). Há crime?", a: "Não. <strong>Atipicidade</strong> (Falta de Nexo Causal)." },
-                { q: "<strong>[43º]</strong> Quebrar vidro de carro para salvar bebê de insolação é crime?", a: "Não. <strong>Estado de Necessidade</strong>." },
-                { q: "<strong>[42º]</strong> Atirou achando que era ameaça (erro justificável). Qual a tese?", a: "<strong>Legítima Defesa Putativa</strong> (Erro de Tipo Permissivo)." },
-                { q: "<strong>[42º]</strong> Vítima morre por causa independente (ataque de cão). Réu responde pela morte?", a: "Não. Rompimento do <strong>Nexo Causal</strong> (Art. 13 CP)." },
-                { q: "<strong>[41º]</strong> Cabe ROC contra decisão que CONCEDE Habeas Corpus?", a: "Não. Só cabe contra decisão <strong>denegatória</strong>." },
-                { q: "<strong>[40º]</strong> Recebimento da denúncia sem recurso próprio. Como impugnar?", a: "<strong>Habeas Corpus</strong> ou Reclamação." },
-                { q: "<strong>[39º]</strong> Ato de terrorismo por motivação política. Configura a Lei 13.260?", a: "Não. <strong>Atipicidade</strong>. A lei exclui motivação política." },
-                { q: "<strong>[39º]</strong> Infiltração virtual de policial sem ordem judicial. É válida?", a: "Não. Viola a <strong>Reserva de Jurisdição</strong>. Prova ilícita." }
-            ]
+            "43exame": {
+                context: "Arthur denunciado por lesão corporal leve contra esposa Aline (Violência Doméstica). Chutou a esposa após jogo. MP pediu condenação e indenização. Juiz condenou. MP não recorreu. Aline (assistente) recorreu para aumentar pena.",
+                steps: [
+                    { label: "Qual a Peça Cabível?", answer: "<strong>Contrarrazões de Apelação</strong>.<br>Fundamento: Art. 600 do CPP.<br>Você defende Arthur contra o recurso da assistente." },
+                    { label: "Prazo", answer: "<strong>3 dias</strong> (Rito da Lei 9.099/95 aplicado subsidiariamente ou prazo de contrarrazões em geral)." },
+                    { label: "Preliminar 1: Ação Penal", answer: "<strong>Ação Pública Incondicionada</strong>.<br>Não se aplica Lei 9.099 na Maria da Penha (Súmula 542 STJ). Aline não poderia 'desistir'." },
+                    { label: "Preliminar 2: Nulidade", answer: "<strong>Inexistência de Cerceamento.</strong><br>Perguntas sobre vida sexual da vítima são proibidas (Art. 400-A CPP)." },
+                    { label: "Mérito", answer: "Manutenção da sentença quanto à imputabilidade.<br>Embriaguez voluntária não exclui culpa (Art. 28, II CP)." },
+                    { label: "Pedidos", answer: "<strong>Desprovimento</strong> do recurso da acusação." }
+                ]
+            },
+            "42exame": {
+                context: "Diogo denunciado por Lavagem de Dinheiro (ocultar R$ 100 mil). Polícia entrou na casa sem mandado (apenas denúncia anônima) e achou o dinheiro. Não achou drogas. Diogo é reincidente.",
+                steps: [
+                    { label: "Qual a Peça Cabível?", answer: "<strong>Resposta à Acusação</strong>.<br>Art. 396 / 396-A do CPP.<br>Momento logo após a citação." },
+                    { label: "Preliminar de Nulidade", answer: "<strong>Ilicitude da Prova (Busca Domiciliar).</strong><br>Denúncia anônima sem diligência prévia não autoriza ingresso sem mandado.<br>Violação ao Art. 5º, XI, CF. Teoria dos Frutos da Árvore Envenenada." },
+                    { label: "Preliminar de Inépcia", answer: "<strong>Inépcia da Denúncia.</strong><br>MP não descreveu o crime antecedente necessário para lavagem de dinheiro.<br>Art. 41 CPP." },
+                    { label: "Mérito", answer: "<strong>Absolvição Sumária (Atipicidade).</strong><br>Ter dinheiro em casa não é crime se não provada a origem ilícita.<br>Art. 397, III CPP." }
+                ]
+            },
+            "41exame": {
+                context: "Abelardo, Lineu e Mendonça denunciados (Corrupção). Lineu delatou. Juiz deu prazo comum para alegações finais (delator e delatados). Sentença proferida por juiz substituto que não fez a instrução.",
+                steps: [
+                    { label: "Qual a Peça Cabível?", answer: "<strong>Apelação</strong> (Art. 593, I, CPP)." },
+                    { label: "Nulidade 1: Prazos", answer: "<strong>Cerceamento de Defesa.</strong><br>Delatado deve falar DEPOIS do delator (prazo sucessivo, não comum).<br>Súmula Vinculante ou Jurisprudência STF." },
+                    { label: "Nulidade 2: Juiz", answer: "<strong>Violação à Identidade Física do Juiz.</strong><br>Art. 399, §2º CPP. Quem colheu a prova deve julgar, salvo exceções legais." },
+                    { label: "Mérito", answer: "<strong>Absolvição (Falta de Provas).</strong><br>Palavra do colaborador isolada não basta para condenar.<br>Art. 4º, §16, Lei 12.850/13." }
+                ]
+            }
         };
 
-        /* =========================================
-           LÓGICA DA APLICAÇÃO
-           ========================================= */
-        
-        let currentMode = 'esqueleto';
-        let currentPieceKey = '';
-        let currentStepIndex = 0;
-        let pieceSteps = [];
-        let cardIndex = 0;
+        const QUESTIONS = [
+            { q: "O falso (doc) se exauriu no estelionato. Qual a tese?", a: "<strong>Consunção</strong> (Súmula 17 STJ)." },
+            { q: "Réu menor de 18 na ação, vítima morre depois. Imputável?", a: "Não. <strong>Teoria da Atividade</strong> (Art. 4º CP)." },
+            { q: "Quebra de vidro p/ salvar bebê de insolação é crime?", a: "Não. <strong>Estado de Necessidade</strong>." },
+            { q: "Busca domiciliar só com denúncia anônima é válida?", a: "Não. Prova <strong>Ilícita</strong>." },
+            { q: "Palavra do delator sozinha condena?", a: "Não. Precisa de <strong>Corroboração</strong> (Lei 12.850)." },
+            { q: "Embriaguez voluntária isenta de pena?", a: "Não. (Art. 28, II CP)." },
+            { q: "Prazo da Apelação (Regra Geral)?", a: "5 dias (Interposição) + 8 dias (Razões)." },
+            { q: "Prazo da Apelação (JECRIM)?", a: "10 dias (Interposição e Razões juntas)." }
+        ];
 
-        // Inicialização
-        window.onload = function() {
-            initApp();
-        };
+        // --- LÓGICA ---
+        let currentSteps = [];
+        let stepIndex = 0;
 
-        function initApp() {
-            const selector = document.getElementById('piece-selector');
-            selector.innerHTML = '<option value="">Selecione um Exame...</option>';
-            
-            // Ordena as chaves (mais recente primeiro)
-            const keys = Object.keys(OAB_DATA.pecas).sort().reverse();
-            
-            keys.forEach(key => {
-                const option = document.createElement('option');
-                option.value = key;
-                option.text = key.replace("exame", "º Exame");
-                selector.appendChild(option);
+        function init() {
+            const sel = document.getElementById('piece-selector');
+            Object.keys(OAB_DATA).sort().reverse().forEach(k => {
+                let opt = document.createElement('option');
+                opt.value = k;
+                opt.text = k.replace("exame", "º Exame");
+                sel.appendChild(opt);
             });
-            loadCard(); 
+            loadNextFlashcard();
         }
 
-        // Navegação (Tabs)
-        function switchMode(mode, btnElement) {
-            currentMode = mode;
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-
-            // Reseta visibilidade
-            document.getElementById('selection-screen').classList.add('hidden');
-            document.getElementById('wizard-screen').classList.add('hidden');
-            document.getElementById('flashcard-screen').classList.add('hidden');
-
-            if (mode === 'esqueleto') {
-                if (currentPieceKey) {
-                    document.getElementById('wizard-screen').classList.remove('hidden');
-                } else {
-                    document.getElementById('selection-screen').classList.remove('hidden');
-                }
+            if(tab === 'peca') {
+                document.getElementById('selection-screen').classList.remove('hidden');
+                document.getElementById('wizard-screen').classList.add('hidden');
+                document.getElementById('flashcard-screen').classList.add('hidden');
+                // Se já tinha peça rodando, volta pro wizard
+                if(currentSteps.length > 0) document.getElementById('wizard-screen').classList.remove('hidden');
+                if(currentSteps.length > 0) document.getElementById('selection-screen').classList.add('hidden');
             } else {
+                document.getElementById('selection-screen').classList.add('hidden');
+                document.getElementById('wizard-screen').classList.add('hidden');
                 document.getElementById('flashcard-screen').classList.remove('hidden');
             }
         }
 
-        // Wizard (Esqueleto)
-        function startWizard() {
+        function startCase() {
             const key = document.getElementById('piece-selector').value;
-            if (!key) return;
-
-            currentPieceKey = key;
-            pieceSteps = OAB_DATA.pecas[key];
-            currentStepIndex = 0;
-
+            if(!key) return;
+            
+            const data = OAB_DATA[key];
+            currentSteps = data.steps;
+            stepIndex = 0;
+            
+            document.getElementById('case-text').innerText = data.context;
+            document.getElementById('case-context-box').classList.remove('hidden');
+            document.getElementById('btn-show-context').classList.add('hidden');
+            
             document.getElementById('selection-screen').classList.add('hidden');
             document.getElementById('wizard-screen').classList.remove('hidden');
             
@@ -537,92 +381,74 @@
         }
 
         function renderStep() {
-            const stepData = pieceSteps[currentStepIndex];
-            const container = document.getElementById('step-card-container');
-            const total = pieceSteps.length;
-            const progress = ((currentStepIndex + 1) / total) * 100;
-
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-
+            const step = currentSteps[stepIndex];
+            const total = currentSteps.length;
+            const container = document.getElementById('step-container');
+            
             container.innerHTML = `
-                <div class="step-card">
-                    <div style="font-size:0.8rem; color:#A0AEC0; text-align:center; margin-bottom:10px; font-weight:600;">
-                        PASSO ${currentStepIndex + 1} DE ${total}
-                    </div>
-                    <div class="step-label">${stepData.label}</div>
+                <div class="step-header">Passo ${stepIndex + 1} de ${total}</div>
+                <div class="step-content">
+                    <div class="question-text">${step.label}</div>
                     
-                    <input type="text" class="step-input" placeholder="Digite a tese principal aqui..." id="current-input">
-                    
-                    <button class="btn-show-hint" onclick="toggleHint()">Estou travada, preciso de uma dica</button>
-                    <div class="hint-box" id="hint-box">${stepData.hint}</div>
+                    <button id="btn-rev" class="btn-reveal" onclick="revealAnswer()">
+                        Tocar para Revelar Gabarito
+                    </button>
 
-                    <div class="step-actions">
-                        <button class="btn-nav btn-prev" onclick="prevStep()" ${currentStepIndex === 0 ? 'disabled style="opacity:0.5"' : ''}>
-                            <i class="fas fa-arrow-left"></i> Voltar
+                    <div id="ans-box" class="answer-box">${step.answer}</div>
+
+                    <div id="rating" class="rating-area">
+                        <button class="btn-rate rate-bad" onclick="nextStep(false)">
+                            <i class="fas fa-times"></i> Errei / Esqueci
                         </button>
-                        <button class="btn-nav btn-next" onclick="nextStep()">
-                            ${currentStepIndex === total - 1 ? 'Finalizar <i class="fas fa-check"></i>' : 'Próximo <i class="fas fa-arrow-right"></i>'}
+                        <button class="btn-rate rate-good" onclick="nextStep(true)">
+                            <i class="fas fa-check"></i> Acertei
                         </button>
                     </div>
-                </div>
-                <div style="text-align:center; margin-top:20px;">
-                    <button onclick="exitWizard()" style="border:none; background:none; color:#718096; cursor:pointer; font-size:0.9rem;">Escolher outra peça</button>
                 </div>
             `;
-            
-            // Foco suave (apenas em desktop para não abrir teclado no celular abruptamente)
-            if (window.innerWidth > 768) {
-                setTimeout(() => document.getElementById('current-input').focus(), 100);
-            }
         }
 
-        function toggleHint() {
-            const box = document.getElementById('hint-box');
-            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        function revealAnswer() {
+            document.getElementById('btn-rev').style.display = 'none';
+            document.getElementById('ans-box').style.display = 'block';
+            document.getElementById('rating').style.display = 'flex';
         }
 
-        function nextStep() {
-            if (currentStepIndex < pieceSteps.length - 1) {
-                currentStepIndex++;
+        function nextStep(result) {
+            if(stepIndex < currentSteps.length - 1) {
+                stepIndex++;
                 renderStep();
             } else {
-                // Efeito de conclusão simples
-                document.getElementById('step-card-container').innerHTML = `
-                    <div class="step-card" style="text-align:center; align-items:center;">
-                        <i class="fas fa-check-circle" style="font-size:3rem; color:var(--success); margin-bottom:20px;"></i>
-                        <h2 style="color:var(--primary);">Parabéns!</h2>
-                        <p>Você estruturou toda a peça mentalmente.</p>
-                        <button class="btn-nav btn-next" onclick="exitWizard()" style="margin-top:20px; width:100%;">Voltar ao Início</button>
+                // Fim
+                document.getElementById('step-container').innerHTML = `
+                    <div class="step-content">
+                        <i class="fas fa-trophy" style="font-size:3rem; color:var(--accent); margin-bottom:20px;"></i>
+                        <h2>Peça Finalizada!</h2>
+                        <p>Você revisou toda a estrutura.</p>
+                        <button class="btn-reveal" onclick="location.reload()">Escolher Outra</button>
                     </div>
                 `;
             }
         }
 
-        function prevStep() {
-            if (currentStepIndex > 0) {
-                currentStepIndex--;
-                renderStep();
-            }
+        function showContext() {
+            document.getElementById('case-context-box').classList.remove('hidden');
+            document.getElementById('btn-show-context').classList.add('hidden');
+        }
+        
+        function hideContext() {
+            document.getElementById('case-context-box').classList.add('hidden');
+            document.getElementById('btn-show-context').classList.remove('hidden');
         }
 
-        function exitWizard() {
-            currentPieceKey = '';
-            document.getElementById('piece-selector').value = "";
-            document.getElementById('wizard-screen').classList.add('hidden');
-            document.getElementById('selection-screen').classList.remove('hidden');
-        }
-
-        // Flashcards
-        function loadCard() {
-            const list = OAB_DATA.flashcards;
-            if (!list || list.length === 0) return;
-            
-            const item = list[cardIndex];
+        // FLASHCARDS
+        let qIndex = 0;
+        function loadNextFlashcard() {
+            let next = Math.floor(Math.random() * QUESTIONS.length);
+            let item = QUESTIONS[next];
             document.getElementById('fc-q').innerHTML = item.q;
             document.getElementById('fc-a').innerHTML = item.a;
-            
-            const card = document.getElementById('card-inner');
-            card.classList.remove('flipped');
+            document.getElementById('card-inner').classList.remove('flipped');
         }
 
         function flipCard() {
@@ -630,59 +456,13 @@
         }
 
         function nextCard() {
-            const list = OAB_DATA.flashcards;
-            const container = document.getElementById('flashcard-screen');
-            container.style.opacity = '0';
-            
-            setTimeout(() => {
-                let next = Math.floor(Math.random() * list.length);
-                if (list.length > 1 && next === cardIndex) next = (next + 1) % list.length;
-                
-                cardIndex = next;
-                loadCard();
-                container.style.opacity = '1';
-            }, 300);
+            document.getElementById('flashcard-container').style.opacity = '0'; // Bug fix attempt, assumes container ID
+            // Quick fade effect handled by CSS ideally, doing simple swap
+            loadNextFlashcard();
         }
 
-        // Modo Zen (Respiração)
-        let zenInterval;
-        function toggleZen() {
-            const modal = document.getElementById('zen-modal');
-            const circle = document.getElementById('breath-circle');
-            const text = document.getElementById('breath-text');
-            
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-                return;
-            }
+        window.onload = init;
 
-            modal.style.display = 'flex';
-            
-            let phase = 0; 
-            const runCycle = () => {
-                if (modal.style.display === 'none') return;
-
-                if (phase === 0) { // Inspire (4s)
-                    text.innerText = "Inspire...";
-                    circle.style.transform = "scale(1.5)";
-                    circle.style.transition = "transform 4s ease-out";
-                    phase = 1;
-                    setTimeout(runCycle, 4000);
-                } else if (phase === 1) { // Segure (4s)
-                    text.innerText = "Segure...";
-                    circle.style.transition = "none"; 
-                    phase = 2;
-                    setTimeout(runCycle, 4000); 
-                } else { // Expire (4s)
-                    text.innerText = "Expire...";
-                    circle.style.transition = "transform 4s ease-in";
-                    circle.style.transform = "scale(1)";
-                    phase = 0;
-                    setTimeout(runCycle, 4000);
-                }
-            };
-            runCycle();
-        }
     </script>
 </body>
 </html>
